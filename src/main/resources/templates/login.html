@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+  <link rel="stylesheet" th:href="@{/static/login.css}">
+
+</head>
+<body>
+<!--<form action="login"> </form>-->
+<div id="container" class="container">
+  <!-- FORM SECTION -->
+  <div class="row">
+    <!-- SIGN UP -->
+    <div class="col align-items-center flex-col sign-up">
+      <div class="form-wrapper align-items-center">
+        <div class="form sign-up">
+                <div class="input-group">
+                    <i class='bx bx-mail-send'></i>
+                    <input type="email" placeholder="Email" name="email" id="email">
+                </div>
+                <div class="input-group">
+                    <i class='bx bxs-lock-alt'></i>
+                    <input type="password" placeholder="Password" name="password" id="password">
+                </div>
+                <button id="signUp">
+                    Sign up
+                </button>
+
+          <p>
+                     <span>
+                        Already have an account?
+                     </span>
+            <b onclick="toggle()" class="pointer">
+              Login
+            </b>
+          </p>
+        </div>
+      </div>
+
+    </div>
+    <!-- END SIGN UP -->
+    <!-- SIGN IN -->
+    <div class="col align-items-center flex-col sign-in">
+      <div class="form-wrapper align-items-center">
+          <form action="/login" method="post">
+              <div class="form sign-in">
+                  <div class="input-group">
+                      <i class='bx bxs-user'></i>
+                      <input type="email" placeholder="email" name="username">
+                  </div>
+                  <div class="input-group">
+                      <i class='bx bxs-lock-alt'></i>
+                      <input type="password" placeholder="Password" name="password">
+                  </div>
+                  <button>
+                      Sign in
+                  </button>
+                  <p>
+                  </p>
+                  <p>
+                     <span>
+                        Don't have an account?
+                     </span>
+                      <b onclick="toggle()" class="pointer">
+
+                          Register
+                      </b>
+                  </p>
+              </div>
+          </form>
+
+      </div>
+      <div class="form-wrapper">
+
+      </div>
+    </div>
+    <!-- END SIGN IN -->
+  </div>
+  <!-- END FORM SECTION -->
+  <!-- CONTENT SECTION -->
+  <div class="row content-row">
+    <!-- SIGN IN CONTENT -->
+    <div class="col align-items-center flex-col">
+      <div class="text sign-in">
+        <h2>
+          Welcome
+        </h2>
+
+      </div>
+      <div class="img sign-in">
+
+      </div>
+    </div>
+    <!-- END SIGN IN CONTENT -->
+    <!-- SIGN UP CONTENT -->
+    <div class="col align-items-center flex-col">
+      <div class="img sign-up">
+
+      </div>
+      <div class="text sign-up">
+        <h2>
+          Join with us
+        </h2>
+
+      </div>
+    </div>
+    <!-- END SIGN UP CONTENT -->
+  </div>
+  <!-- END CONTENT SECTION -->
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+  let container = document.getElementById('container')
+
+  toggle = () => {
+    container.classList.toggle('sign-in')
+    container.classList.toggle('sign-up')
+  }
+
+  setTimeout(() => {
+    container.classList.add('sign-in')
+  }, 200)
+
+
+  function register(){
+      const email = $('#email').val()
+      const password = $('#password').val();
+      const data = {email, password};
+      fetch('http://localhost:8088/api/register', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+      })
+          .then(response => response.json())
+          .then(data => {
+              console.log(data);
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
+  }
+  const signUp = document.getElementById('signUp')
+
+  signUp.onclick = () => {
+      register();
+  };
+
+
+  function renderDatas() {
+
+    $.ajax({
+      url: "http://localhost:8088/api/user",
+      type: 'GET',
+      success: function (users) {
+        userData = users;
+        console.log(users)
+        drawTable();
+      },
+      errors: function (errors) {
+
+      }
+    });
+  }
+</script>
+
+
+</body>
+
+</html>

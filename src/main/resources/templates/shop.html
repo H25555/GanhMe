@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+          content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
+
+    <!-- title -->
+    <title>Shop</title>
+
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png">
+    <!-- google font -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="assets/css/all.min.css">
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <!-- owl carousel -->
+    <link rel="stylesheet" href="assets/css/owl.carousel.css">
+    <!-- magnific popup -->
+    <link rel="stylesheet" href="assets/css/magnific-popup.css">
+    <!-- animate css -->
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <!-- mean menu css -->
+    <link rel="stylesheet" href="assets/css/meanmenu.min.css">
+    <link rel="stylesheet" href="assets/css/sortPrice.css">
+    <!-- main style -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <!-- responsive -->
+    <link rel="stylesheet" href="assets/css/responsive.css">
+
+</head>
+<body>
+
+<!--PreLoader-->
+<div class="loader">
+    <div class="loader-inner">
+        <div class="circle"></div>
+    </div>
+</div>
+<!--PreLoader Ends-->
+
+<!-- header -->
+<th:block th:replace="header.html"></th:block>
+<!-- end header -->
+
+<!-- search area -->
+<div class="search-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <span class="close-btn"><i class="fas fa-window-close"></i></span>
+                <div class="search-bar">
+                    <div class="search-bar-tablecell">
+                        <h3>Search For:</h3>
+                        <input type="text" placeholder="Keywords">
+                        <button type="submit">Search <i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end search arewa -->
+<input type="hidden" th:value="${id_user}" id="id_user">
+<!-- breadcrumb-section -->
+<div class="breadcrumb-section breadcrumb-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 text-center">
+                <div class="breadcrumb-text">
+                    <p>Gì Cũng Có</p>
+                    <h1>Ganh Me Shop</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--sort theo giá-->
+<div>
+<div id="form-wrapper">
+    <form action="/p/quote.php" method="GET">
+        <div id="debt-amount-slider">
+            <input type="radio" name="debt-amount" id="1" value="1" required>
+            <label for="1" data-debt-amount="< 10k"></label>
+            <input type="radio" name="debt-amount" id="2" value="2" required>
+            <label for="2" data-debt-amount="10k-25k"></label>
+            <input type="radio" name="debt-amount" id="3" value="3" required>
+            <label for="3" data-debt-amount="25k-50k"></label>
+            <input type="radio" name="debt-amount" id="4" value="4" required>
+            <label for="4" data-debt-amount="50k-100k"></label>
+            <input type="radio" name="debt-amount" id="5" value="5" required>
+            <label for="5" data-debt-amount=">100k"></label>
+            <div id="debt-amount-pos"></div>
+        </div>
+    </form>
+    <button id="button-price" type="submit">Tìm Theo Giá</button>
+</div>
+</div>
+
+<!-- end breadcrumb section -->
+
+<!--<button data-toggle="modal" data-target="#modal-create" data-togg onclick="showCreate()"-->
+<!--        class="btn btn-primary btn-sm mb-3" >Add Product</button>-->
+<!-- Modal create-->
+<div class="modal fade" id="modal-create" data-backdrop="static">
+    <div class="modal-dialog modal-xs">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Product</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" id="create-product">
+                    <input type="hidden" name="action" id="action" value="create">
+                    <div class=" card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="name">Tên</label><span class="text-danger">*</span>
+                                    <input type="text" name="name" id="name" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="price">Giá</label><span class="text-danger">*</span>
+                                    <input type="text" name="price" id="price" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Mô Tả</label><span class="text-danger">*</span>
+                                    <input type="text" name="description" id="description" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="photo">Ảnh</label><span class="text-danger">*</span>
+                                    <input type="text" name="photo" id="photo" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="category">Category</label>
+                                    <span class="text-danger">*</span>
+                                    <select name="category" id="category" class="form-control">
+                                        <!-- Lấy categories từ server gửi về và đổ vào đây bằng Js -->
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button class=" form-submit btn btn-primary">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<!-- Modal edit-->
+<div class="modal fade" id="modal-edit" data-backdrop="static">
+    <div class="modal-dialog modal-xs">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Product</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" id="edit-product">
+                    <input type="hidden" name="id" id="edit-id" class="form-control">
+
+                    <div class=" card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="edit-name">Name</label><span class="text-danger">*</span>
+                                    <input type="text" name="name" id="edit-name" class="form-control">
+                                    <span class="form-message"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-price">Price</label><span class="text-danger">*</span>
+                                    <input type="text" name="price" id="edit-price" class="form-control">
+                                    <span class="form-message"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-description">Description</label><span class="text-danger">*</span>
+                                    <input type="text" name="description" id="edit-description" class="form-control">
+                                    <span class="form-message"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="category">Category</label>
+                                    <span class="text-danger">*</span>
+                                    <select name="category" id="edit-category" class="form-control">
+                                        <!-- Lấy categories từ server gửi về và đổ vào đây bằng Js -->
+                                    </select>
+                                    <span class="form-message"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button class=" form-submit btn btn-primary">Add</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<!-- products -->
+<div class="product-section mt-150 mb-150">
+    <div class="container">
+        <div class="row-products" style="display: flex">
+            <div class="col-md-12">
+                <div class="product-filters">
+                    <ul id="cate">
+<!--                        <li class="active" data-filter="*">Tất Cả</li>-->
+<!--                        <li data-filter=".strawberry">Strawberry</li>-->
+<!--                        <li data-filter=".berry">Berry</li>-->
+<!--                        <li data-filter=".lemon">Lemon</li>-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row " id="productList">
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="pagination-wrap">
+                    <ul>
+                        <li><a href="#">Prev</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a class="active" href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">Next</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end products -->
+
+    <!-- logo carousel -->
+    <div class="logo-carousel-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12" >
+
+                    <div class="logo-carousel-inner" id="single-logo-item">
+<!--                        <div class="single-logo-item" >-->
+<!--                            <img src="assets/img/company-logos/1.png" alt="">-->
+<!--                        </div>-->
+<!--                        <div class="single-logo-item">-->
+<!--                            <img src="assets/img/company-logos/2.png" alt="">-->
+<!--                        </div>-->
+<!--                        <div class="single-logo-item">-->
+<!--                            <img src="assets/img/company-logos/3.png" alt="">-->
+<!--                        </div>-->
+<!--                        <div class="single-logo-item">-->
+<!--                            <img src="assets/img/company-logos/4.png" alt="">-->
+<!--                        </div>-->
+<!--                        <div class="single-logo-item">-->
+<!--                            <img src="assets/img/company-logos/5.png" alt="">-->
+<!--                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end logo carousel -->
+
+    <!-- footer -->
+    <th:block th:replace="footer.html"></th:block>
+    <!-- end footer -->
+
+    <!-- copyright -->
+    <div class="copyright">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <p>Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Imran Hossain</a>, All Rights
+                        Reserved.<br>
+                        Distributed By - <a href="https://themewagon.com/">Themewagon</a>
+                    </p>
+                </div>
+                <div class="col-lg-6 text-right col-md-12">
+                    <div class="social-icons">
+                        <ul>
+                            <li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+                            <li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end copyright -->
+
+
+
+<!-- jquery -->
+<script src="assets/js/jquery-1.11.3.min.js"></script>
+<!-- bootstrap -->
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<!-- count down -->
+<script src="assets/js/jquery.countdown.js"></script>
+<!-- isotope -->
+<script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
+<!-- waypoints -->
+<script src="assets/js/waypoints.js"></script>
+<!-- owl carousel -->
+<script src="assets/js/owl.carousel.min.js"></script>
+<!-- magnific popup -->
+<script src="assets/js/jquery.magnific-popup.min.js"></script>
+<!-- mean menu -->
+<script src="assets/js/jquery.meanmenu.min.js"></script>
+<!-- sticker js -->
+<script src="assets/js/sticker.js"></script>
+<!-- main js -->
+<script src="assets/js/main.js"></script>
+
+</body>
+<script>
+    const userId = +document.getElementById("id_user").value;
+    const products = JSON.parse(localStorage.getItem("products"));
+
+    function render() {
+        $.ajax({
+            url: `/api/products`,
+            method: 'GET'
+        }).done(data => {
+            let products = data;
+            let str = "";
+            localStorage.setItem(`products`, JSON.stringify(data)),
+            products.forEach((product, index) => {
+                str += `
+                 <div class="col-lg-4 col-md-6 text-center strawberry" >
+        <div class="single-product-item">
+          <div class="product-image"><img src="${product.image}" style="width: 250px;height: 150px">
+            <a href=""></a>
+          </div>
+          <h3>${product.name}</h3>
+          <p class="product-price"><span>${product.description}</span> ${product.price}đ</p>
+          <a  class="cart-btn add-to-cart" data-id="${product.id}"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+        </div>
+     </div>`
+            })
+            $("#productList").html(str);
+        })
+    }
+
+    render();
+
+    function renderFooter() {
+        $.ajax({
+            url: `/api/products`,
+            method: 'GET'
+        }).done(data => {
+            let products = data;
+            let str = "";
+            $("#single-logo-item").html(str);
+            products.forEach((product, index) => {
+                str += `
+               <div class="single-logo-item col-md-3" >
+                          <img src="${product.image}" alt="">
+                        </div>`
+            })
+            $("#single-logo-item").html(str);
+        })
+    }
+
+    renderFooter();
+    function renderCategory(){
+        $.ajax({
+            url: `/api/products/category`,
+            method: 'GET'
+        }).done(data => {
+            let str = "";
+            let str2 = '<li class="tag-category"' + 'data-filter="*" onclick="render()">Tất Cả</li>'
+
+            data.forEach((category) => {
+                str += `
+                        <li class="tag-category" data-filter=".strawberry" onclick="showProductsByTag((${category.id}))">${category.name} </li>
+  `
+            })
+            document.getElementById('cate').innerHTML = str2 + str;
+        })
+    }
+    renderCategory()
+    function showProductsByTag(value){
+        console.log(value)
+        $.ajax({
+            url: "/api/products/category/"+ value,
+            type: 'GET',
+            success: function (datas) {
+                let str = "";
+                datas.forEach((product) => {
+                    str += `
+                  <div class="col-lg-4 col-md-6 text-center strawberry" id="product-area">
+        <div class="single-product-item">
+          <div class="product-image"><img src="${product.image}"style="width: 200px;height: 150px">
+            <a href=""></a>
+          </div>
+          <h3>${product.name}</h3>
+          <p class="product-price"><span>${product.description}</span> ${product.price}đ</p>
+          <a  class="cart-btn add-to-cart" id="add-to-cart-button" data-id="${product.id}"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+        </div>
+     </div>
+
+               `
+                })
+                $("#productList").html(str);
+            }
+        });
+    }
+
+    function showCreate() {
+        $.ajax({
+            url: "/api/category/findAll",
+            type: 'GET',
+            success: function (data) {
+                let option = `<option value="">Vui lòng chọn loại sản phẩm</option>`;
+
+                data.forEach(cate => {
+                    option += `<option  value=${cate.id}>${cate.name}</option>`;
+                })
+                $('#category').html(option);
+            },
+            errors: function (errors) {
+
+            }
+        });
+
+    }
+
+    function showEdit(idProduct) {
+        $.ajax({
+            url: "/api/products/edit",
+            type: 'GET',
+            data: {
+                id: idProduct
+            },
+            success: function (data) {
+                console.log(data.product)
+                $('#edit-id').val(data.product.id)
+                $('#edit-name').val(data.product.name)
+                $('#edit-price').val(data.product.price)
+                $('#edit-description').val(data.product.description)
+                let option = ``;
+                data.categories.forEach(cate => {
+                    if (cate.id === data.product.category.id) {
+                        option += `<option  value=${cate.id} selected>${cate.name}</option>`;
+                    } else {
+                        option += `<option  value=${cate.id}>${cate.name}</option>`;
+                    }
+                })
+                $('#edit-category').html(option);
+            }
+        });
+    }
+
+    function Delete(id) {
+        $.ajax({
+            url: "/api/products/delete",
+            type: 'Get',
+            data: {
+                id: id
+            },
+            success: function (message) {
+                renderDatas()
+            }
+        })
+    }
+
+    $(function () {
+        render();
+    });
+    const getCart = (userId) => {
+        const cartKey = `cart_${userId}`;
+        return JSON.parse(localStorage.getItem(cartKey)) || [];
+    }
+    const addToCart = (idProduct) => {
+        const product = products.find(product => product.id === idProduct);
+        const cartKey = `cart_${userId}`;
+        const cart = getCart(userId);
+
+        const existingItem = cart.find(item => item.product.id === idProduct);
+
+        if (existingItem) {
+
+            existingItem.quantity += 1;
+            existingItem.total = existingItem.product.price * existingItem.quantity;
+        } else if (product) {
+            const newItem = {
+                product: product,
+                quantity: 1,
+                total: product.price
+            };
+            cart.push(newItem);
+        }
+        localStorage.setItem(cartKey, JSON.stringify(cart));
+    }
+    const handleAllAddToCartClick = () => {
+        $("#productList").on('click', '.add-to-cart',function(event) {
+            event.preventDefault();
+            const id = $(this).data('id');
+            addToCart(id);
+        } )
+    }
+    handleAllAddToCartClick();
+</script>
+</html>

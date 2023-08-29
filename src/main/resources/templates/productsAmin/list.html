@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
+<head>
+    <title>List of products</title>
+
+    <th:block th:replace="layout/head :: style-meta"/>
+
+    <th:block th:replace="layout/head :: style-app"/>
+
+</head>
+
+<body>
+
+<!-- Begin page -->
+<div id="wrapper">
+
+    <!-- Topbar Start -->
+    <th:block th:replace="layout/navbar-custom"/>
+    <!-- end Topbar -->
+
+    <!-- ========== Left Sidebar Start ========== -->
+    <th:block th:replace="layout/left-side-menu"/>
+    <!-- Left Sidebar End -->
+
+    <!-- ============================================================== -->
+    <!-- Start Page Content here -->
+    <!-- ============================================================== -->
+
+    <div class="content-page">
+        <div class="content">
+
+            <!-- Start Content-->
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box">
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Minton</a></li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
+                                    <li class="breadcrumb-item active">List of products</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title">List of products</h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card-box">
+                        <div class="search">
+                            <input  type="search" placeholder="Search" oninput="searchProducts(this.value)">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                        <p class="sub-header">
+                            The Stack Table stacks the table headers to a two column layout with headers on the left.
+                            Resize your viewport to across the 40em (640px) breakpoint to see the change.
+                        </p>
+
+                        <table class="tablesaw table mb-0" data-tablesaw-mode="stack" id="tbProduct">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">action</th>
+                            </tr>
+                            </thead>
+                            <tbody id="test">
+                            <!--                            <tr>-->
+                            <!--                                <td>Avatar</td>-->
+                            <!--                                <td>1</td>-->
+                            <!--                                <td>2009</td>-->
+                            <!--                                <td>83%</td>-->
+                            <!--                                <td>$2.7B</td>-->
+                            <!--                            </tr>-->
+                            </tbody>
+                        </table>
+
+                    </div> <!-- end card-box-->
+                </div> <!-- end col -->
+            </div><!-- container -->
+
+            <div class="icon" style="margin-left: 2px">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCreate"
+                        onclick="showCreate()">
+                    Tạo
+                </button>
+
+            </div> <!-- content -->
+
+            <!-- Footer Start -->
+            <th:block th:replace="layout/footer"/>
+            <!-- end Footer -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+
+    </div>
+
+    <!--Modal Create-->
+    <th:block th:replace="productsAmin/create"/>
+    <!--Modal update-->
+    <th:block th:replace="productsAmin/update"/>
+
+
+
+
+    <!-- Right Sidebar -->
+    <th:block th:replace="layout/right-bar"/>
+    <!-- /Right-bar -->
+
+    <!-- Right bar overlay-->
+    <div class="rightbar-overlay"></div>
+</div>
+    <th:block th:replace="layout/script :: script-vendor"/>
+
+    <th:block th:replace="layout/script :: script-app"/>
+
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let products = [];
+        let productId = 0;
+        function renderProducts() {
+            $('#tbProduct tbody').empty();
+
+            $.ajax({
+                url: 'http://localhost:8080/api/products',
+                method: 'GET'
+            }).done((data) => {
+                products = data;
+                let str = "";
+
+                products.forEach((product, index) => {
+                    str += `
+                <tr>
+                    <td>${product.id}</td>
+                    <td><img src="${product.image}" alt="" style="width: 77px"></td>
+                    <td>${product.name}</td>
+                    <td>${product.price}</td>
+                    <td>${product.description}</td>
+                    <td>${product.category.name}</td>
+                     <td>
+                    <button class="btn btn-info btnEdit" data-product-id="${product.id}" data-toggle="tooltip" title="Edit">
+                        EDIT
+                    </button>
+                    <button class="btn btn-danger btnDelete" data-product-id="${product.id}" data-toggle="tooltip" title="Delete">
+                        DELETE
+                    </button>
+                </td>
+                </tr>`;
+                });
+                $('#tbProduct tbody').append(str);
+            });
+        }
+
+        renderProducts();
+
+        function showCreate() {
+            $.ajax({
+                url: "/api/products/create",
+                type: 'GET',
+                success: function (data) {
+                    let selectOptions = '<label for="category">Category</label><span class="text-danger">*</span><select id="category" name="categories" class="form-control">';
+                    data.forEach(category => {
+                        selectOptions += `<option value="${category.id}">${category.name}</option>`;
+                    });
+                    selectOptions += '</select>';
+                    $('#category').html(selectOptions);
+
+                    $('#create-product')[0].reset();
+                    $('#modalCreate').modal('show');
+                },
+                errors: function (errors) {
+                }
+            });
+        }
+
+        function create() {
+            let form = document.getElementById("create-product");
+            let formData = new FormData(form);
+
+            $.ajax({
+                url: "/api/products/create",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    $('#modalCreate').modal('hide');
+                    renderProducts();
+
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        $(document).on("click","#btnCreate", function () {
+            create();
+        });
+
+        function showEdit(productId) {
+            $.ajax({
+                url: `/api/products/${productId}`,
+                type: 'GET',
+                success: function (product) {
+                    $('#edit-product-id').val(product.id);
+                    $('#edit-name').val(product.name);
+                    $('#edit-price').val(product.price);
+                    $('#edit-description').val(product.description);
+
+                    $('#edit-product-modal').modal('show');
+                },
+                error: function (errors) {
+                    console.error(errors);
+                }
+            });
+        }
+
+        function edit(productId) {
+            let form = document.getElementById("edit-product-form");
+            let formData = new FormData(form);
+
+            $.ajax({
+                url: "/api/products/" + productId ,
+                type: "PATCH",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    $('#edit-product-modal').modal('hide');
+                    renderProducts();
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        $(document).on("click", ".btnEdit", function () {
+            let productId = $(this).data("productId");
+            showEdit(productId);
+        });
+        $(document).on("click", "#btnEdit", function () {
+            let productId = $(this).data("productId");
+            edit(productId);
+        });
+        function deleteProduct(productId) {
+            if (confirm("Are you sure you want to delete this product?")) {
+                $.ajax({
+                    url: `/api/products/${productId}`,
+                    type: "DELETE",
+                    success: function (response) {
+                        console.log(response);
+                        renderProducts();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            }
+        }
+
+        $(document).on("click", ".btnDelete", function () {
+            let productId = $(this).data("product-id");
+            deleteProduct(productId);
+        });
+
+
+        function searchProducts(value) {
+            console.log(value)
+            $.ajax({
+                url: `/api/products/find`,
+                type: 'GET',
+                data: {
+                    search: value
+                },
+
+                success: function (datas) {
+                    console.log(datas);
+                    let str = "";
+
+                    datas.forEach((product) => {
+                        str += `
+                <tr>
+                    <td>${product.id}</td>
+                    <td><img src="${product.image}" alt="" style="width: 77px"></td>
+                    <td>${product.name}</td>
+                    <td>${product.price}</td>
+                    <td>${product.description}</td>
+                    <td>${product.category.name}</td>
+                     <td>
+                    <button class="btn btn-info btnEdit" data-product-id="${product.id}" data-toggle="tooltip" title="Edit">
+                        EDIT
+                    </button>
+                    <button class="btn btn-danger btnDelete" data-product-id="${product.id}" data-toggle="tooltip" title="Delete">
+                        DELETE
+                    </button>
+                </td>
+                </tr>`;
+                    });
+
+                    document.getElementById("test").innerHTML = str;
+                },
+            });
+        }
+    </script>
+
+</body>
+
+</html>

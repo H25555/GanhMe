@@ -1,0 +1,46 @@
+<th:block th:fragment="update">
+
+  <div class="modal fade" id="edit-product-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Edit Product</h4>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="edit-product-form">
+            <input type="hidden" id="edit-product-id" name="id" />
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="edit-name">Name</label><span class="text-danger">*</span>
+                    <input type="text" id="edit-name" name="name" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for="edit-price">Price</label><span class="text-danger">*</span>
+                    <input type="text" id="edit-price" name="price" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for="edit-description">Description</label><span class="text-danger">*</span>
+                    <input type="text" id="edit-description" name="description" class="form-control">
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="btnEdit">
+                <i class="fas fa-save"></i>
+                Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</th:block>
